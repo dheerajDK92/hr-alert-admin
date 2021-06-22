@@ -1,0 +1,82 @@
+<app-skeleton *ngIf="skelton"></app-skeleton>
+<ion-grid *ngIf="!skelton">
+  <ion-col class="ion-text-left" size="4">
+    <ion-searchbar (ionChange)="searchBarChange($event)" placeholder="Search By Site, Name, Email..."></ion-searchbar>
+  </ion-col>
+  <ion-col class="ion-text-left" size="4">
+    <ion-button size="small" color="primary" (click)="uploadMultipleEmployee()">
+      <ion-icon name="cloud-upload-outline"></ion-icon>&nbsp;Upload Multiple Employee
+    </ion-button>
+  </ion-col>
+  <ion-col class="ion-text-right" size="4">
+    <ion-button size="small" color="primary" (click)="downloadCSV()">
+      <ion-icon name="cloud-download-outline"></ion-icon>&nbsp;Download CSV
+    </ion-button>
+  </ion-col>
+  <ion-col class="ion-text-right" size="4">
+    <ion-button size="small" color="primary" (click)="downloadPdf()">
+      <ion-icon name="cloud-download-outline"></ion-icon>&nbsp;Download
+    </ion-button>
+  </ion-col>
+  <ion-col class="ion-text-right" size="4">
+    <ion-button size="small" color="primary">
+      <ion-icon name="people-outline"></ion-icon>&nbsp;Total `{{filterList.length}}` Employee's
+    </ion-button>
+  </ion-col>
+</ion-grid>
+<ion-list *ngIf="!skelton">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3">
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="deleteSelectedEmployee()" type="button" size="small" expand="block">
+            Delete Selected
+          </ion-button>
+          <ion-button (click)="selectAllEmp()" type="button" size="small" expand="block">
+            All Select
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="9">
+        <div class="ion-text-start" color="primary">
+          <ion-button type="button" size="small" expand="block">
+            Employee List's
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item *ngIf="showNoEntryForEmployee || empList?.length==0">
+    <ion-label>
+      <p>There is no employee available in <strong>{{companydata.companyName}}</strong></p>
+    </ion-label>
+  </ion-item>
+  <div *ngIf="!showNoEntryForEmployee">
+    <ion-item *ngFor="let emp of empList; let i=index;">
+      <ion-note slot="end">
+        <ion-badge color="primary" class="itemIndex">{{i + 1}}</ion-badge>
+      </ion-note>
+      <ion-avatar slot="start">
+        <ion-icon title="Change User Profile Pic" *ngIf="!emp.logo" (click)="changeProfilePic(emp)"
+          name="person-outline" class="pointer"></ion-icon>
+        <img title="Change User Profile Pic" *ngIf="emp.logo" height="50" class="pointer" [src]="emp.logoID"
+          (click)="changeProfilePic(emp)" />
+      </ion-avatar>
+      <ion-label>
+        <input type="checkbox" checked="false" [(ngModel)]="emp.checked"/>
+        <h2><strong>{{emp.empname}} <ion-icon color="success" name="shield-checkmark-outline"></ion-icon></strong></h2>
+        <h3>{{companydata.companyName}}</h3>
+        <h3>{{emp.email}}</h3>
+        <p>{{emp.address}}, {{emp.city}}({{emp.pincode}}), {{emp.state}}</p>
+      </ion-label>&nbsp;
+      <ion-icon name="settings-outline" class="pointer" (click)="manageEmp(emp)"></ion-icon>&nbsp; &nbsp; &nbsp;
+      <!-- <ion-label>HR Admin Accesse</ion-label> -->
+      <ion-button (click)="openProofStatus(emp)">Proof Status</ion-button> &nbsp; &nbsp; &nbsp;
+      <ion-button (click)="downloadIDCard(emp)">Download ID Card</ion-button> &nbsp; &nbsp; &nbsp;
+      <ion-label>HR Admin Access</ion-label>
+      <ion-toggle checked={{emp.isHrAdmin}} color="primary" (ionChange)="updateToggleChange($event,emp)"></ion-toggle>
+      <ion-label>Monthly Base</ion-label>
+      <ion-toggle checked={{emp?.isMonthlyCalculation}} color="primary" (ionChange)="updateToggleForMonthly($event,emp)"></ion-toggle>
+    </ion-item>
+  </div>
+</ion-list>

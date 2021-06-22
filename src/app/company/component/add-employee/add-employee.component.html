@@ -1,0 +1,418 @@
+<form #form="ngForm" autocomplete="off" (ngSubmit)="submitUpdateCompanyForm(form)">
+  <!-- Personal Info - start -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="showSecion('personalInfoSection')" type="button" size="small" expand="block">
+            <ion-icon name="caret-up-outline" *ngIf="!personalInfoSection"></ion-icon>
+            <ion-icon name="caret-down-outline" *ngIf="personalInfoSection"></ion-icon>
+            Personal Info
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid id="personalInfoSection">
+    <ion-row justify-content-center>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee ID:<sup class="required">*</sup></ion-label>
+          <ion-input name="empID" type="text" placeholder="Employee ID Assigned by Company...." ngModel required>
+          </ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.empID == ''"><small>Please Enter Employee
+            ID<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Name:<sup class="required">*</sup></ion-label>
+          <ion-input name="empname" type="text" placeholder="Employee Name...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.empname == ''"><small>Please Enter Employee
+            Name<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Phone:<sup class="required">*</sup></ion-label>
+          <ion-input autocomplete name="phone" type="number" placeholder="Phone...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.phone == ''"><small>Please Enter Employee
+            Phone<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Email:<sup class="required">*</sup></ion-label>
+          <ion-input name="email" type="email" placeholder="Email...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.email == ''"><small>Please Enter Employee
+            Email<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Password:<sup class="required">*</sup></ion-label>
+          <ion-input name="password" type="text" placeholder="Password...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.password == ''"><small>Please Enter
+            Password<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Designation:<sup class="required">*</sup></ion-label>
+          <ion-input name="designation" type="text" placeholder="Designation...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.designation == ''"><small>Please Enter
+            Designation<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Date of Birth:</ion-label>
+          <ion-datetime name="DOB" ngModel displayFormat="MM/DD/YYYY">
+          </ion-datetime>
+        </ion-item>
+        <span class="required p-3" *ngIf="validDobSelected"><small>Employee age should be greater or equal
+            to 20 Years as per Govt. Rules.<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Gender</ion-label>
+          <ion-select placeholder="Select Gender" name="gender" ngModel>
+            <ion-select-option value="female">Female</ion-select-option>
+            <ion-select-option value="male">Male</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Date of Joining:</ion-label>
+          <ion-datetime name="DOJ" ngModel displayFormat="MM/DD/YYYY"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Date of Leaving:</ion-label>
+          <ion-datetime name="DOL" ngModel displayFormat="MM/DD/YYYY"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Site:<sup class="required">*</sup></ion-label>
+          <ion-input ngModel name="Site" type="text" placeholder="Site...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Reporting Manager:</em></strong>
+          <ion-toggle checked="true" ngModel name="isReportingManager" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Monthly Base Caclulation:</em></strong>
+          <ion-toggle checked="true" ngModel name="isMonthlyCalculation" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Description:</ion-label>
+          <ion-textarea class="descriptionArea" name="description" type="text" placeholder="About Employee..." ngModel>
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Personal Info - end -->
+
+  <!-- Rules Info - start -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="showSecion('rulesSection')" type="button" size="small" expand="block">
+            <ion-icon name="caret-up-outline" *ngIf="!rulesSection"></ion-icon>
+            <ion-icon name="caret-down-outline" *ngIf="rulesSection"></ion-icon>
+            Rules
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid id="rulesSection">
+    <ion-row justify-content-center>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Start Time:</ion-label>
+          <ion-datetime ngModel name="startTime" displayFormat="HH:mm"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">End Time:</ion-label>
+          <ion-datetime ngModel name="endtTime" displayFormat="HH:mm"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Half Day Applicable:</em></strong>
+          <ion-toggle checked="true" ngModel name="halfDayApplicable" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Minimum Hours of Half Day:</ion-label>
+          <ion-datetime ngModel name="minHoursOfHalfDay" displayFormat="HH:mm" max="05:00"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Max Hours of Continous Work:</ion-label>
+          <ion-datetime ngModel name="maxHoursOfContinousWork" displayFormat="HH:mm" max="04:30" max="21:00">
+          </ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Weekly Offs</ion-label>
+          <ion-select ngModel name="weeklyOffs" multiple="true" placeholder="Self Attendance Method">
+            <ion-select-option value="Mon">Mon</ion-select-option>
+            <ion-select-option value="Tue">Tue</ion-select-option>
+            <ion-select-option value="Wed">Wed</ion-select-option>
+            <ion-select-option value="Thu">Thu</ion-select-option>
+            <ion-select-option value="Fri">Fri</ion-select-option>
+            <ion-select-option value="Sat">Sat</ion-select-option>
+            <ion-select-option value="Sun">Sun</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Self Attendance Method</ion-label>
+          <ion-select ngModel name="selfAttendanceMethod" placeholder="Self Attendance Method">
+            <ion-select-option value="GPS">GPS based only</ion-select-option>
+            <ion-select-option value="GPS/FACE">GPS + Face Scan</ion-select-option>
+            <ion-select-option value="NONE">None</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Attendance From Office:</em></strong>
+          <ion-toggle checked="true" ngModel name="attendanceFromOffice" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Image with Attendance:</em></strong>
+          <ion-toggle checked="true" ngModel name="imageWithAttendance" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <strong><em>Overtime(OT) Applicable:</em></strong>
+          <ion-toggle checked="true" ngModel name="overTimeApplicable" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Rules Info - end -->
+
+
+  <!-- Payment Info - start -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="showSecion('paymentInfoSection')" type="button" size="small" expand="block">
+            <ion-icon name="caret-up-outline" *ngIf="!paymentInfoSection"></ion-icon>
+            <ion-icon name="caret-down-outline" *ngIf="paymentInfoSection"></ion-icon>
+            Payment Info
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid id="paymentInfoSection">
+    <ion-row justify-content-center>
+      <ion-col size-md="12" size-lg="12" size-xs="12">
+        <ion-item>
+          <strong><em>Manual Calculation:</em></strong>
+          <ion-toggle checked="true" (ionChange)="manualCalChange($event)" color="primary" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">BASIC:</ion-label>
+          <ion-input  [(ngModel)]="BASIC" (change)="calculateSalary()" ngModel name="BASIC" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">DA:</ion-label>
+          <ion-input  [(ngModel)]="DA" (change)="calculateSalary()" ngModel name="DA" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">SPECIAl ALLOWANCE:</ion-label>
+          <ion-input [(ngModel)]="SpecialAllowance" (change)="calculateSalary()" ngModel name="SpecialAllowance" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">OTHER ALLOWANCE:</ion-label>
+          <ion-input [(ngModel)]="OtherAllowance" (change)="calculateSalary()" ngModel name="OtherAllowance" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">HRA:</ion-label>
+          <ion-input [(ngModel)]="HRA" ngModel [disabled]="manualCalculation" name="HRA" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">TOTAL EARNING:</ion-label>
+          <ion-input [(ngModel)]="TotalEarning" [disabled]="manualCalculation" ngModel name="TotalEarning" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">ESIC - EMPLOYER:</ion-label>
+          <ion-input [(ngModel)]="ESICEmployer" [disabled]="manualCalculation" ngModel name="ESICEmployer" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">EPF - EMPLOYER:</ion-label>
+          <ion-input [(ngModel)]="EPFEmployer" [disabled]="manualCalculation" ngModel name="EPFEmployer" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">ESIC - EMPLOYEE:</ion-label>
+          <ion-input [(ngModel)]="ESICEmployee" [disabled]="manualCalculation" ngModel name="ESICEmployee" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">EPF - EMPLOYEE:</ion-label>
+          <ion-input  [(ngModel)]="EPFEmployee" [disabled]="manualCalculation"  ngModel name="EPFEmployee" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">PT:</ion-label>
+          <ion-input [(ngModel)]="PT" [disabled]="manualCalculation" ngModel name="PT" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">MLWF:</ion-label>
+          <ion-input [(ngModel)]="MLWF" (change)="calculateSalary()" ngModel name="MLWF" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">OTHER DEDUCTION:</ion-label>
+          <ion-input [(ngModel)]="OtherDeduction" (change)="calculateSalary()" ngModel name="OtherDeduction" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">TOTAL DEDUCTION:</ion-label>
+          <ion-input [(ngModel)]="TotalDeduction" [disabled]="manualCalculation" ngModel name="TotalDeduction" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="4">
+        <ion-item>
+          <ion-label position="floating">NET TOTAL:</ion-label>
+          <ion-input [(ngModel)]="NetTotal" [disabled]="manualCalculation" ngModel name="NetTotal" type="number" placeholder="0.00" ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Payment Info - end -->
+
+  <!-- Address details - start -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="showSecion('addressDetailsSection')" type="button" size="small" expand="block">
+            <ion-icon name="caret-up-outline" *ngIf="!addressDetailsSection"></ion-icon>
+            <ion-icon name="caret-down-outline" *ngIf="addressDetailsSection"></ion-icon>
+            Address Details
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid id="addressDetailsSection">
+    <ion-row justify-content-center>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Address:<sup class="required">*</sup></ion-label>
+          <ion-input name="address" type="text" placeholder="Address...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.address == ''"><small>Please Enter
+            Address<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Employee Address 2:</ion-label>
+          <ion-input name="address2" type="text" placeholder="Address 2...." ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Pin code:<sup class="required">*</sup></ion-label>
+          <ion-input name="pincode" type="text" placeholder="Pin code...." ngModel required></ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.pincode == ''"><small>Please Enter Pin
+            Code<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">City:<sup class="required">*</sup></ion-label>
+          <ion-input name="city" type="text" placeholder="City...." ngModel required>
+          </ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.city == ''"><small>Please Enter
+            City<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">State:<sup class="required">*</sup></ion-label>
+          <ion-input name="state" type="text" placeholder="State...." ngModel required>
+          </ion-input>
+        </ion-item>
+        <span class="required p-3" *ngIf="form.form.value.state == ''"><small>Please Enter
+            State<sup>*</sup></small></span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Country:<sup class="required">*</sup></ion-label>
+          <ion-input name="country" type="text" disabled value="India" placeholder="India" ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Address details - end -->
+
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <div padding>
+          <!-- [disabled]="!form.valid" -->
+          <ion-button size="large" type="submit" expand="block">Add Employee
+            Details
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

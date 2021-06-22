@@ -1,0 +1,89 @@
+<!-- <app-skeleton *ngIf="skelton"></app-skeleton> -->
+<ion-grid>
+  <ion-grid>
+    <div class="ion-text-center">
+      <h2>Assets of {{ companyDetails?.companyName }}</h2>
+    </div>
+    <ion-segment value="assetsList" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="assetsList">
+        <ion-label>Assets</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="addAssets">
+        <ion-label>Add Assets</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- -->
+    <ion-row *ngIf="listView" class="header">
+      <ion-col col class="text-left">
+        <ion-label>#</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Asset Name</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Asset Category</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Price</ion-label>
+      </ion-col>
+    </ion-row>
+    <ng-container *ngIf="listView">
+      <ion-row style="border-bottom: groove;" *ngFor="let item of list; let i=index;">
+        <ion-col col class="text-left" style="width:10px">
+          <ion-label>{{i + 1}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.assetName}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.assetCategory}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.assetPrice}}</ion-label>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ion-card *ngIf="list?.length == 0 && listView">
+      <ion-card-content>
+        <p><strong>No Result Found.</strong></p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- -->
+    <!-- -->
+    <ion-row *ngIf="addView">
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Asset Name:</ion-label>
+          <ion-input [(ngModel)]="data.assetName" type="text" placeholder="Asset Name...."></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Asset Category:</ion-label>
+          <ion-input [(ngModel)]="data.assetCategory" type="text" placeholder="Asset Category...."></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Asset Price:</ion-label>
+          <ion-input [(ngModel)]="data.assetPrice" type="number" placeholder="Asset Price...."></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <div padding>
+          <ion-button type="button" (click)="submit()" size="large" type="submit" expand="block">Add Asset
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <!-- -->
+  </ion-grid>
+</ion-grid>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary" (click)="backToMain()">
+    <ion-icon name="return-up-back-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

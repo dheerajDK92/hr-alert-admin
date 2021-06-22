@@ -1,0 +1,7 @@
+{
+  "name": "HR Alert",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

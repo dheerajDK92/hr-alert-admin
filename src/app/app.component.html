@@ -1,0 +1,68 @@
+<ion-app *ngIf="isAdminValid && appRefresh">
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay" *ngIf="isLoggedIn">
+      <ion-content>
+        <ion-list id="inbox-list">
+          <ion-list-header>
+            <h3><ion-icon color="primary" name="people-circle-outline"></ion-icon></h3>
+            <!-- <img height="60" src="./../assets//icon/logo.png" /> -->
+            <small>{{appName}}</small>
+            </ion-list-header>
+          <hr />
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+            <ion-item
+              (click)="selectedIndex = i; selectedIndexOthers=null;selectedIndexInfo=null;"
+              routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              [class.selected]="selectedIndex == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <hr />
+          <ion-list-header class="list-header">Info</ion-list-header>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appInfoPages; let i = index">
+            <ion-item
+              (click)="selectedIndexInfo = i; selectedIndexOthers=null;selectedIndex=null;"
+              routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              [class.selected]="selectedIndexInfo == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <hr />
+          <ion-list-header class="list-header">Others</ion-list-header>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appInfoOthers; let i = index">
+            <ion-item
+              (click)="selectedIndexOthers = i; selectedIndexReports = null; selectedIndexInfo = null; selectedIndex=null;"
+              routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              [class.selected]="selectedIndexOthers == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-menu contentId="main-content" type="overlay" *ngIf="!isLoggedIn">
+      <ion-content>
+        <ion-list id="inbox-list">
+          <ion-list-header>
+            <h3><ion-icon color="primary" name="people-circle-outline"></ion-icon></h3>
+            <!-- <img height="60" src="./../assets//icon/logo.png" /> -->
+            <small>{{appName}}</small>
+            </ion-list-header>
+          <hr />
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appUnAuthPages; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              [class.selected]="selectedIndexUnAuth == i">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <app-off-line *ngIf="offLine"></app-off-line>
+    <ion-router-outlet *ngIf="!offLine" id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

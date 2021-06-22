@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Clean Deleted Company Employee</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="skelton">
+  <app-skeleton></app-skeleton>
+</ion-content>
+<ion-content *ngIf="!skelton">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-start" color="primary">
+          <ion-button (click)="selectAllEmp()" type="button" size="small" expand="block">
+            All Select
+          </ion-button>&nbsp;
+          <ion-button (click)="deleteSelectedEmployee()" type="button" size="small" expand="block">
+            Delete Selected
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size=12>
+        TOTAL: {{empList?.length}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item *ngFor="let emp of empList">
+    <ion-avatar slot="start">
+      <ion-icon title="Profile Pic" name="person-outline" class="pointer"></ion-icon>
+    </ion-avatar>
+    <ion-label>
+      <input type="checkbox" checked="false" [(ngModel)]="emp.checked" />
+      <h2><strong>{{emp.empname}} <ion-icon color="success" name="shield-checkmark-outline"></ion-icon></strong></h2>
+      <h3>{{emp.email}}</h3>
+      <p>{{emp.address}}, {{emp.city}}({{emp.pincode}}), {{emp.state}}</p>
+    </ion-label>
+  </ion-item>
+</ion-content>

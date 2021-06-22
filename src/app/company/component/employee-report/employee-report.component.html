@@ -1,0 +1,556 @@
+<!-- <app-skeleton *ngIf="skelton"></app-skeleton> -->
+<ion-grid>
+  <ion-content [fullscreen]="true">
+    <ion-grid>
+      <ion-segment value="reports" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="reports">
+          <ion-label>Reports</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="salaryReports">
+          <ion-label>Salary Reports</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-grid>
+    <div *ngIf="viewType == 'reports'">
+      <ion-grid>
+        <ion-row color="primary" justify-content-center>
+          <ion-col align-self-center size-md="6" size-lg="6" size-xs="12">
+            <div padding>
+
+              <ion-item>
+                <ion-label position="floating">Report Type:<sup class="required">*</sup></ion-label>
+                <ion-select ngModel [(ngModel)]="reportType" multiple="false" placeholder="Report Type...">
+                  <ion-select-option value="Attendance Summary">Attendance Summary
+                  </ion-select-option>
+                  <ion-select-option value="Leave Summary">Leave Summary
+                  </ion-select-option>
+                  <ion-select-option value="Advance Summary">Advance Summary
+                  </ion-select-option>
+                  <ion-select-option value="Reimbursement Summary">Reimbursement Summary
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item class="text-right">
+                <ion-button (click)="search()">Search</ion-button>
+              </ion-item>
+            </div>
+          </ion-col>
+          <ion-col align-self-center size-md="6" size-lg="6" size-xs="12">
+            <div padding>
+              <ion-item>
+                <ion-label position="floating">Select Employee:<sup class="required">*</sup></ion-label>
+                <ion-select ngModel [(ngModel)]="selectedEmployee" multiple="false" placeholder="Select Employee...">
+                  <ion-select-option *ngFor="let item of employees" [value]="item">{{item.empname}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <!-- Leave Start -->
+      <div *ngIf="selectedScreen == 'Leave'">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="10">
+              <ion-searchbar (ionChange)="leaveSearchBarChange($event)" placeholder="Search By Email...">
+              </ion-searchbar>
+            </ion-col>
+            <ion-col size="2" class="ion-text-right">
+              <ion-button size="small" (click)="downloadPdf()">
+                <ion-icon name="download-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Table Start -->
+        <h4 class="ion-text-center">{{EmpData.empname}} Leave Detail List</h4>
+
+        <ion-row class="header">
+          <ion-col col class="text-left">
+            <ion-label>#</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Type</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>From</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>To</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Status</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Comment</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Action</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row style="border-bottom: groove;" *ngFor="let item of leaveByEmploy; let i=index;">
+          <ion-col col class="text-left">
+            <ion-label>{{i + 1}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.reason}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.startDate | date }}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.endDate | date }}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.status}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.hrRemarks}}</ion-label>
+          </ion-col>
+          <ion-col col>
+            <p *ngIf="item.status == 'inProgress'">
+              <ion-button class="actionBtn" color="danger" size="small" (click)="performRejectActionLeave(item)">
+                <ion-icon name="close-circle-outline"></ion-icon> Reject
+              </ion-button>
+              <ion-button class="actionBtn" color="success" size="small" (click)="performApproveActionLeave(item)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon> Approve
+              </ion-button>
+            </p>
+          </ion-col>
+        </ion-row>
+        <!-- Table End -->
+
+        <ion-card *ngIf="leaveByEmploy?.length == 0">
+          <ion-card-content>
+            <p><strong>No Result Found.</strong></p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!-- Leave End-->
+      <!-- Advance -->
+      <div *ngIf="selectedScreen == 'Advance'">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="10">
+              <ion-searchbar (ionChange)="advanceSearchBarChange($event)" placeholder="Search By Email...">
+              </ion-searchbar>
+            </ion-col>
+            <ion-col size="2" class="ion-text-right">
+              <ion-button size="small" (click)="downloadPdf()">
+                <ion-icon name="download-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Table Start -->
+        <h4 class="ion-text-center">{{EmpData.empname}} Advance Detail List</h4>
+
+        <ion-row class="header">
+          <ion-col col class="text-left">
+            <ion-label>#</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Type</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Amount</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Remarks</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Status</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>HR Comment</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Action</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row style="border-bottom: groove;" *ngFor="let item of advanceByEmploy; let i=index;">
+          <ion-col col class="text-left">
+            <ion-label>{{i + 1}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.advanceType}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.amount}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.remarks}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.status}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.hrRemarks}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <p *ngIf="item.status == 'inProgress'">
+              <ion-button class="actionBtn" color="danger" size="small" (click)="performRejectActionAdvance(item)">
+                <ion-icon name="close-circle-outline"></ion-icon> Reject
+              </ion-button>
+              <ion-button class="actionBtn" color="success" size="small" (click)="performApproveActionAdvance(item)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon> Approve
+              </ion-button>
+            </p>
+          </ion-col>
+        </ion-row>
+        <!-- Table End -->
+
+        <ion-card *ngIf="advanceByEmploy?.length == 0">
+          <ion-card-content>
+            <p><strong>No Result Found.</strong></p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!-- Advance -->
+      <!--Reimbursement -->
+      <div *ngIf="selectedScreen == 'Reimbursement'">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="10">
+              <ion-searchbar (ionChange)="reimbursementSearchBarChange($event)" placeholder="Search By Email...">
+              </ion-searchbar>
+            </ion-col>
+            <ion-col size="2" class="ion-text-right">
+              <ion-button size="small" (click)="downloadPdf()">
+                <ion-icon name="download-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Table Start -->
+        <h4 class="ion-text-center">{{EmpData.empname}} Reimbursement List</h4>
+
+        <ion-row class="header">
+          <ion-col col class="text-left">
+            <ion-label>#</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Type</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Amount</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Remarks</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Status</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>HR Comment</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Action</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row style="border-bottom: groove;" *ngFor="let item of reimbursementByEmploy; let i=index;">
+          <ion-col col class="text-left">
+            <ion-label>{{i + 1}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.reimbursementType}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.amount}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.remarks}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.status}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.hrRemarks}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <p *ngIf="item.status == 'inProgress'">
+              <ion-button class="actionBtn" color="danger" size="small"
+                (click)="performRejectActionReimbursement(item)">
+                <ion-icon name="close-circle-outline"></ion-icon> Reject
+              </ion-button>
+              <ion-button class="actionBtn" color="success" size="small"
+                (click)="performApproveActionReimbursement(item)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon> Approve
+              </ion-button>
+            </p>
+          </ion-col>
+        </ion-row>
+        <!-- Table End -->
+
+        <ion-card *ngIf="reimbursementByEmploy?.length == 0">
+          <ion-card-content>
+            <p><strong>No Result Found.</strong></p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!--Reimbursement End-->
+      <!-- Attendance start-->
+      <div *ngIf="selectedScreen == 'Attendance'">
+        <!-- Table Start -->
+        <h4 class="ion-text-center">{{EmpData.empname}} Attendance List</h4>
+        <ion-row class="header">
+          <ion-col col class="text-left">
+            <ion-label>#</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Employee</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Address</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Date</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Start Time</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Stop Time</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>Total Work</ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row style="border-bottom: groove;" *ngFor="let item of attendanceList; let i=index;">
+          <ion-col col class="text-left" style="width:10px">
+            <ion-label>{{i + 1}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{EmpData.empname}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.address}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.punchDate}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.startTime}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label>{{item.stopTime}}</ion-label>
+          </ion-col>
+          <ion-col col class="text-left">
+            <ion-label *ngIf="item.stopTime !== ''">{{diff_minutes(item.startTime, item.stopTime)}}</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-card *ngIf="attendanceList?.length == 0">
+          <ion-card-content>
+            <p><strong>No Result Found.</strong></p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!-- Attendance End-->
+    </div>
+
+    <div *ngIf="viewType == 'salaryReports'" class="salaryReports">
+      <ion-grid>
+        <ion-item>
+          <ion-label>Select Month:<sup class="required">*</sup></ion-label>
+          <ion-datetime [(ngModel)]="monthForSalary" name="month" ngModel displayFormat="MM/YYYY">
+          </ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-button size="small" color="primary" (click)="searchSalaryByMonth()">Search</ion-button>
+        </ion-item>
+        <ion-item *ngIf="salaryDetails?.length > 0">
+          <ion-button size="small" color="primary" (click)="deleteSelectedMonthSalary()">Delete Selected Salary Reports
+          </ion-button>
+          &nbsp;
+          <ion-button size="small" color="primary" (click)="downloadSalaryReports()">Download PDF Format Salary Reports
+          </ion-button>
+          &nbsp;
+          <ion-button size="small" color="primary" (click)="downloadCSVSalaryReport()">Download CSV Format Salary
+            Reports
+          </ion-button>
+        </ion-item>
+      </ion-grid>
+
+
+      <!-- Table Start -->
+      <h4 class="ion-text-center">Salary Report for {{ salaryMonth }}</h4>
+      <ion-row class="header">
+        <ion-col col class="text-left">
+          <ion-label>#</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Name</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Emp ID</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Gross Fixed</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Paid Days</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Baisc</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>DA</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>HRA</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Conv All.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Prod Incentive</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Other Earning</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Wash All</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Gross Salary</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>PF</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>PTAX</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>ESIC</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>LWF</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Loan Dedn.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Adv Dedn.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Other Dedn.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Gross Dedn.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Net Sal.</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Cheque Number</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Download</ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row style="border-bottom: groove;" *ngFor="let item of salaryDetails; let i=index;">
+        <ion-col col class="text-left" style="width:10px">
+          <ion-label>{{i + 1}} 
+            <input type="checkbox" checked="false" [(ngModel)]="item.checked"/>
+          </ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.empName}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.employeeId}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.GROSSFIXED}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.paidDays}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.BASIC}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.DA}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.HRA}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.ConvAll}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.ProdIncentive}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.OtherEarning}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.WashAll}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.GROSSEARNING}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.PF}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.PTAX}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.ESICEmployee}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.MLWF}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.LoanDeduction}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.AdvDeduction}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.OtherDeduction}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.GROSSDEDUCION}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.NETEARNING}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>{{item.CHEQUE}}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label><ion-button size="small" (click)="downloadPaySlip(item)"><ion-icon name="download-outline"></ion-icon> PDF</ion-button></ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row style="border-bottom: groove;">
+        <ion-col col class="text-left">
+          <ion-label>Totlal Net : {{ totalNetExpense }}</ion-label>
+        </ion-col>
+        <ion-col col class="text-left">
+          <ion-label>Totlal HRA : {{ totalNetHRA }}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-card *ngIf="salaryDetails?.length == 0">
+        <ion-card-content>
+          <p><strong>No Result Found.</strong></p>
+        </ion-card-content>
+      </ion-card>
+
+
+    </div>
+
+  </ion-content>
+</ion-grid>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary" (click)="backToMain()">
+    <ion-icon name="return-up-back-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

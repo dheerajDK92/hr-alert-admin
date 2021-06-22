@@ -1,0 +1,32 @@
+<ion-segment value="companyProfile" (ionChange)="segmentChanged($event)">
+  <ion-segment-button value="companyProfile">
+    <ion-label>Company Profile</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="employee">
+    <ion-label>Employee List</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="AddEmployee">
+    <ion-label>Add Employee</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<!-- load view based upon active segment - start -->
+<app-company-profile [companydata]="companyDetails" *ngIf="companyProfileView"></app-company-profile>
+<app-employee-list [companydata]="companyDetails" *ngIf="employeeListView"></app-employee-list>
+<app-add-employee [companydata]="companyDetails" (changeView)="activateView($event)" *ngIf="addEmployeeView"></app-add-employee>
+<!-- load view based upon active segment - end -->
+
+<!-- Company setting fab icons - start -->
+<ion-grid>
+  <ion-row>
+    <ion-col size="6" *ngIf="companyProfileView">
+    <ion-fab-button color="primary" (click)="backToMain()">
+          <ion-icon name="return-up-back-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-col>
+    <ion-col size="6" *ngIf="companyProfileView">
+     <ion-button color="danger" (click)="deleteCompany()">Delete `{{ companyDetails.companyName }}` Company/Employee</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<!-- Company setting fab icons - end -->

@@ -1,0 +1,209 @@
+<!-- <app-skeleton *ngIf="skelton"></app-skeleton> -->
+<ion-grid>
+  <ion-item>
+    <ion-label>Select Employee:</ion-label>
+    <ion-select ngModel [(ngModel)]="formData.employee" multiple="false" placeholder="Select Employee...">
+      <ion-select-option *ngFor="let item of employees" [value]="item">{{item.empname}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Select Month:<sup class="required">*</sup></ion-label>
+    <ion-datetime [(ngModel)]="formData.month" name="month" ngModel displayFormat="MM/YYYY">
+    </ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label slot="start">
+      <ion-button (click)="backToMain()">
+        <ion-icon name="arrow-back-circle-outline"></ion-icon> Back
+      </ion-button>
+    </ion-label>
+    <ion-button (click)="fetchDetails()">Fetch Details</ion-button>
+  </ion-item>
+  <ion-item *ngIf="isShownSalarySlipSection && attendanceList.length > 0">
+    <ion-label slot="start">
+      <ion-button (click)="deleteSelectedAttendance()">Delete Selected
+      </ion-button>
+    </ion-label>
+    <ion-button (click)="enableHalfDayIfNotPunchOut()">Enable Half Day If not Punch out</ion-button><br />
+    <ion-button (click)="enablefullDayIfNotPunchOut()">Enable Full Day If not Punch out</ion-button>
+  </ion-item>
+  <!-- show result -->
+  <!-- Table Start -->
+  <div *ngIf="isShownSalarySlipSection">
+    <h4 class="ion-text-center">{{formData?.employee?.empname}} Attendance List</h4>
+
+    <!-- <ngx-datatable [rows]="attendanceList" [columns]="columns"> </ngx-datatable> -->
+
+
+    <ion-row class="header">
+      <ion-col col class="text-left">
+        <ion-label>#</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Employee</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Address</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Date</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Start Time</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Stop Time</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>Total Work</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="border-bottom: groove;" *ngFor="let item of attendanceList; let i=index;">
+      <ion-col col class="text-left" style="width:10px">
+        <ion-label>{{i + 1}}
+          <input type="checkbox" checked="false" [(ngModel)]="item.checked" />
+        </ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>{{formData?.employee?.empname}}</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>{{item.address}}</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>{{item.punchDate}}</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>{{item.startTime}}</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label>{{item.stopTime}}</ion-label>
+      </ion-col>
+      <ion-col col class="text-left">
+        <ion-label *ngIf="item.stopTime !== ''">{{diff_minutes(item.startTime, item.stopTime, item.punchDate)}}
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-card *ngIf="attendanceList?.length == 0">
+      <ion-card-content>
+        <p><strong>No Result Found.</strong></p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <strong><em>Manual Calculation:</em></strong>
+        <ion-toggle (ionChange)="manualCalChange($event)" color="primary" slot="end"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>Download:</ion-label>
+        <ion-button size="small" (click)="downloadPaySlip()">Download PaySlip</ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label>Send To Emp.:</ion-label>
+        <ion-button size="small" (click)="sendToEmployee()">Send</ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label>Company:</ion-label>
+        <!-- <ion-text><Strong>{{companyDetails.companyName}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>Month:</ion-label>
+        <ion-text><Strong>{{formData.month | date}}</Strong></ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Days:</ion-label>
+        <ion-text><Strong>{{totalDaysOnMonth}}</Strong></ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Working Days on Month:</ion-label>
+        <ion-text><Strong>{{totalDaysOnMonth - (sunForMonth.length + satForMonth.length)}} Days</Strong></ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Week Off on Month:</ion-label>
+        <ion-text><Strong>{{sunForMonth.length + satForMonth.length}} Days</Strong></ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>BASIC:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.BASIC">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>DA:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.DA">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.DA}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>Special Allowance:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.SpecialAllowance">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.SpecialAllowance}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>Other Allowance:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.OtherAllowance">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.OtherAllowance}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>HRA:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.HRA">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.HRA}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>TotalEarning:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.TotalEarning">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.TotalEarning}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>ESICEmployee:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.ESICEmployee">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.ESICEmployee}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>EPFEmployee:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.EPFEmployee">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.EPFEmployee}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>PT:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.PT">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.PT}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>MLWF:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.MLWF">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.MLWF}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>OtherDeduction:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.OtherDeduction">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.OtherDeduction}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>TotalDeduction:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.TotalDeduction">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.TotalDeduction}}</Strong></ion-text> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>NetTotal:</ion-label>
+        <ion-input [disabled]="!manualCalculation" [(ngModel)]="finalCalculation.NetTotal">
+        </ion-input>
+        <!-- <ion-text><Strong>{{finalCalculation.NetTotal}}</Strong></ion-text> -->
+      </ion-item>
+
+    </ion-card>
+  </div>
+  <!-- end result -->
+</ion-grid>

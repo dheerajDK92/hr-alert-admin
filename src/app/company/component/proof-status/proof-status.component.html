@@ -1,0 +1,231 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="11">
+          <ion-buttons slot="start" (click)="cancelPopUp()">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+          </ion-buttons>
+          <h3>{{formData.empname}} Proof Status</h3>
+        </ion-col>
+        <ion-col size="1">
+          <h3>
+            <ion-icon name="close-circle-outline" class="pointer" (click)="cancelPopUp()" float-right></ion-icon>
+          </h3>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-segment value="panCardSegment" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="panCardSegment">
+      <ion-label>{{formData.empname}}'s PAN Card</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="addressProffSection">
+      <ion-label>{{formData.empname}}'s Address Proof</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="bankDetailSection">
+      <ion-label>{{formData.empname}}'s Bank Detail's</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-card *ngIf="panCardSegment">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-badge color="warning">Not Verified</ion-badge>
+      </ion-card-subtitle>
+      <!-- <ion-card-title></ion-card-title> -->
+    </ion-card-header>
+
+    <ion-card-content>
+      <form #form="ngForm" autocomplete="off" (ngSubmit)="submitPanCardForm(form)">
+        <!-- Personal Info - start -->
+        <ion-grid id="personalInfoSection">
+          <ion-row justify-content-center>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="floating">PAN Number:<sup class="required">*</sup></ion-label>
+                <ion-input name="pan" [(ngModel)]="PANEneterd" type="text" placeholder="Employee PAN Number...." ngModel
+                  required>
+                </ion-input>
+              </ion-item>
+              <span class="required p-3"
+                *ngIf="form.form.value.pan == '' || form.form.value.pan?.length != 10"><small>Please Enter 10 Digit PAN
+                  Card Number<sup>*</sup></small></span>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button color="primary" type="button" (click)="PanSave()">Save</ion-button>&nbsp;&nbsp;
+              <ion-button color="primary" type="button" (click)="PanUpload()">Upload PAN</ion-button>&nbsp;&nbsp;
+              <!-- <ion-button color="primary">Verify PAN</ion-button> -->
+            </ion-col>
+            <ion-col size="6" *ngIf="panImageURL !== null">
+              <a [href]="panImageURL" target="_blank"><img [src]="panImageURL"/></a>
+            </ion-col>
+            <ion-col size="6" *ngIf="panImageURL == null">
+             <h4>No File Uploaded So Far For PAN.</h4>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Personal Info - end -->
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="addressProffSection">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-badge color="warning">Not Verified</ion-badge>
+      </ion-card-subtitle>
+      <!-- <ion-card-title></ion-card-title> -->
+    </ion-card-header>
+
+    <ion-card-content>
+      <form #form="ngForm" autocomplete="off" (ngSubmit)="submitPanCardForm(form)">
+        <!-- Personal Info - start -->
+        <ion-grid id="personalInfoSection">
+          <ion-row justify-content-center>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="floating">Aadhaar Card:<sup class="required">*</sup></ion-label>
+                <ion-input [(ngModel)]="ADHAAREneterd" name="aadhaar" type="number"
+                  placeholder="Aadhaar Card Number...." ngModel required>
+                </ion-input>
+              </ion-item>
+              <span class="required p-3" *ngIf="form.form.value.aadhaar == ''"><small>Please Enter 12 Digit
+                  Aadhaar Card Number<sup>*</sup></small></span>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button color="primary" type="button" (click)="ADHAARSave()">Save</ion-button>&nbsp;&nbsp;
+              <ion-button color="primary" type="button" (click)="AdhaarUpload()">Upload Adhaar</ion-button>&nbsp;&nbsp;
+              <!-- <ion-button color="primary">Verify Aadhaar Card</ion-button> -->
+            </ion-col>
+            <ion-col size="6" *ngIf="adhaarImageURL !== null">
+              <a [href]="adhaarImageURL" target="_blank"><img [src]="adhaarImageURL"/></a>
+            </ion-col>
+            <ion-col size="6" *ngIf="adhaarImageURL == null">
+             <h4>No File Uploaded So Far For ADHAAR.</h4>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Personal Info - end -->
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="bankDetailSection">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-badge color="success" *ngIf="IFSCValidated">Bank Details Added with IFSC</ion-badge>
+        <ion-badge color="warning">Bank Account Not Verified</ion-badge>&nbsp;
+      </ion-card-subtitle>
+      <!-- <ion-card-title></ion-card-title> -->
+    </ion-card-header>
+
+    <ion-card-content>
+      <form #form="ngForm" autocomplete="off" (ngSubmit)="submitPanCardForm(form)">
+        <!-- Personal Info - start -->
+        <ion-grid id="personalInfoSection">
+          <ion-row justify-content-center>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="floating">Name:<sup class="required">*</sup></ion-label>
+                <ion-input [(ngModel)]="AccountHolderName" name="name" type="text" placeholder="Name...." ngModel
+                  required>
+                </ion-input>
+              </ion-item>
+              <span class="required p-3" *ngIf="form.form.value.name == ''"><small>Please Enter Name As Per Bank
+                  Account<sup>*</sup></small></span>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="floating">Mobile:<sup class="required">*</sup></ion-label>
+                <ion-input [(ngModel)]="AccountHolderMobileNumber" name="mobile" disabled type="text"
+                  [placeholder]="formData?.phone" [value]="formData?.phone" ngModel required>
+                </ion-input>
+              </ion-item>
+              <span class="required p-3" *ngIf="form.form.value.mobile == ''"><small>Please Enter
+                  Number<sup>*</sup></small></span>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="floating">Bank Account Number:<sup class="required">*</sup></ion-label>
+                <ion-input [(ngModel)]="bankAccountNumber" name="bankAccountNumber" type="text"
+                  placeholder="Bank Account Number...." ngModel required>
+                </ion-input>
+              </ion-item>
+              <span class="required p-3" *ngIf="form.form.value.bankAccountNumber == ''"><small>Please Enter Bank
+                  Account Number<sup>*</sup></small></span>
+            </ion-col>
+            <ion-col size="6">
+              <ion-row>
+                <ion-col size="6">
+                  <ion-item>
+                    <ion-label position="floating">IFSC<sup class="required">*</sup></ion-label>
+                    <ion-input name="ifsc" [(ngModel)]="ifsc" [disabled]="IFSCValidated" type="text"
+                      placeholder="IFSC...." ngModel required>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button color="primary" *ngIf="!IFSCValidated" (click)="verifyIFSC(form.form.value.ifsc)">Verify
+                    IFSC</ion-button>
+                  <ion-button color="primary" *ngIf="IFSCValidated" (click)="clearISFC()">Clear IFSC Selection
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+
+              <span class="required p-3" *ngIf="form.form.value.ifsc == ''"><small>Please Enter IFSC
+                  Code<sup>*</sup></small></span>
+            </ion-col>
+          </ion-row>
+          <hr />
+          <ion-row *ngIf="IFSCValidated">
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>IFSC:</strong> {{ifscValidatedData?.IFSC}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>Bank:</strong> {{ifscValidatedData?.BANK}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>BANKCODE:</strong> {{ifscValidatedData?.BANK}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>BRANCH:</strong> {{ifscValidatedData?.BANK}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>CONTACT:</strong> {{ifscValidatedData?.CONTACT}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>CITY:</strong> {{ifscValidatedData?.BANK}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>ADDRESS:</strong> {{ifscValidatedData?.ADDRESS}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>DISTRICT:</strong> {{ifscValidatedData?.DISTRICT}}</h3>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <h3><strong>STATE:</strong> {{ifscValidatedData?.STATE}}</h3>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <ion-button color="primary" (click)="saveBankAcccount()">Save</ion-button>
+            </ion-col>
+            <ion-col size-md="3" size-lg="3" size-xs="12">
+              <!-- <ion-button color="primary" (click)="uploadDocument()">Upload Document</ion-button> -->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Personal Info - end -->
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="cancelPopUp()">
+    <ion-fab-button color="primary">
+      <ion-icon name="return-up-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

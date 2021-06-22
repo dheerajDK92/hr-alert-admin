@@ -1,0 +1,32 @@
+<!-- <app-skeleton *ngIf="skelton"></app-skeleton> -->
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <p>Please Select Site to <strong>Download QR Code</strong> for Employee's <strong>By Site</strong>.</p>
+    <!-- select site -->
+    <ion-item>
+      <ion-label position="floating">Select Site:<sup class="required">*</sup></ion-label>
+      <ion-select ngModel [(ngModel)]="siteSelected" multiple="false" placeholder="Select Site...">
+        <ion-select-option *ngFor="let item of sites" [value]="item">{{item}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!-- site end -->
+  </ion-grid>
+
+
+
+  <!-- Fab icons - start -->
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="downloadSiteBarcode()">
+      <ion-icon name="download-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- Fab icons - end -->
+
+</ion-content>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary" (click)="backToMain()">
+    <ion-icon name="return-up-back-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

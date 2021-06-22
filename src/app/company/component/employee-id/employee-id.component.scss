@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+.header{
+    border-bottom: groove;
+    background: #ffc409;
+    color: #333;
+  }
+  
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+body{
+  background: #b696d7;
+}
+
+.wrapper{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #ffc409;
+  padding: 35px 15px 15px;
+  border-radius: 5px;
+}
+
+.wrapper:before{
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 13px;
+  background: #ad8506;
+  border-radius: 50px;
+}
+
+.wrapper:after{
+  content: "";
+  position: absolute;
+  top: -181px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 200px;
+  background: #353535;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.125);
+}
+
+.card{
+  width: 200px;
+  height: 320px;
+  background: #fff;
+  padding: 20px 20px 0;
+  position: relative;
+  border-radius: 5px;
+}
+
+.card img{
+  width: 30%;
+  height: 60px !important;
+  // margin-bottom: 80px;
+}
+
+
+
+.card .info{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  padding: 20px;
+  background: #353535;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.card p{
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+}
+@media print {
+  .viewChangeBtn, .printBtn, ion-header {
+      display: none;
+  }
+}
+.aclass {
+  padding-left: 8%;
+  img {
+    padding-left: 8%;
+  }
+}
+img {
+  padding-left: 8%;
+}

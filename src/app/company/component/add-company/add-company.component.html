@@ -1,0 +1,98 @@
+<form #form="ngForm" autocomplete="off" (ngSubmit)="submitAddCompanyForm(form)">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button type="button" size="small" expand="block">
+            Add Company Info
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Name:</ion-label>
+          <ion-input name="companyName" type="text" placeholder="Company Name...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Email:</ion-label>
+          <ion-input name="email" type="email" placeholder="Email...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Phone:</ion-label>
+          <ion-input name="phone" type="number" placeholder="Phone...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Address:</ion-label>
+          <ion-input name="address" type="text" placeholder="Address...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Address 2:</ion-label>
+          <ion-input name="address2" type="text" placeholder="Address 2...." ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Pin code:</ion-label>
+          <ion-input name="pincode" type="text" placeholder="Pin code...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>City:</ion-label>
+          <ion-input name="city" type="text" placeholder="City...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>State:</ion-label>
+          <ion-input name="state" type="text" placeholder="State...." ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Country:</ion-label>
+          <ion-input name="country" type="text" disabled value="India" placeholder="India" ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Emp Limit:</ion-label>
+          <ion-input name="EmpLimit" type="number" value="10" placeholder="Emp Limit" ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Description:</ion-label>
+          <ion-textarea class="descriptionArea" name="description" type="text" placeholder="Company About Us..." ngModel>
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <div padding>
+          <ion-button type="submit" [disabled]="!form.valid" size="large" type="submit" expand="block">Add Company
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button>
+    <ion-icon name="return-up-back-outline" (click)="backToMain()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

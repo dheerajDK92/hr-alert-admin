@@ -1,0 +1,92 @@
+<!-- <app-skeleton *ngIf="skelton"></app-skeleton> -->
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <!-- select site -->
+    <ion-row>
+      <ion-col size="6">
+        <p>Please Select Site to for Employee's Manual Punch.</p>
+
+      </ion-col>
+      <ion-col size="6">
+        <ion-item *ngIf="employees?.length > 0">
+          <ion-button size="small" (click)="downloadAll()">Download All Emp CSV</ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Select Site:<sup class="required">*</sup></ion-label>
+          <ion-select ngModel (ionChange)="siteChange($event)" [(ngModel)]="siteSelected" multiple="false"
+            placeholder="Select Site...">
+            <ion-select-option *ngFor="let item of sites" [value]="item">{{item}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-row>
+          <ion-col size="6">
+            <ion-item *ngIf="sitesEmployee?.length > 0">
+              <ion-button size="small" (click)="downloadSiteCSV()">Download Site CSV</ion-button>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item *ngIf="sitesEmployee?.length > 0">
+              <ion-button size="small" (click)="uploadPunchCSV()">Upload Punch</ion-button>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row *ngFor="let item of sitesEmployee">
+      <ion-col size="3">
+        <ion-item>
+          <ion-label position="floating">{{item.empname}}</ion-label>
+          <ion-checkbox [(ngModel)]="item.isSelectedForPunch"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <!-- site end -->
+      <!-- select punchDate -->
+      <ion-col size="3">
+        <ion-item>
+          <ion-label position="floating">Select Punch Date:<sup class="required">*</sup></ion-label>
+          <ion-datetime name="DOB" [(ngModel)]="item.punchDateSelected" ngModel displayFormat="MM/DD/YYYY">
+          </ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="3">
+        <ion-item>
+          <ion-label position="floating">Start Time:<sup class="required">*</sup></ion-label>
+          <ion-datetime [(ngModel)]="item.punchStartTime" ngModel name="startTime" displayFormat="HH:mm">
+          </ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="3">
+        <ion-item>
+          <ion-label position="floating">Stop Time:<sup class="required">*</sup></ion-label>
+          <ion-datetime [(ngModel)]="item.punchStopTime" ngModel name="startTime" displayFormat="HH:mm">
+          </ion-datetime>
+        </ion-item>
+      </ion-col>
+      <!-- punchDate end -->
+
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <ion-button size="small" (click)="submit()">Submit</ion-button>
+      </ion-item>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary" (click)="backToMain()">
+    <ion-icon name="return-up-back-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

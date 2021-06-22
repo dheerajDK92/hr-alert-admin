@@ -1,0 +1,153 @@
+<app-header [headerText]="main"></app-header>
+<ion-header collapse="condense">
+  <ion-toolbar>
+    <ion-title size="large">{{ main }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="skelenton">
+  <!-- <app-skeleton></app-skeleton> -->
+  <app-company-skeleton></app-company-skeleton>
+</ion-content>
+<ion-content *ngIf="!skelenton && activeScreen=='main'">
+  <ion-refresher slot="fixed" (ionRefresh)="getcmpList($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-row>
+    <ion-col size="6" *ngFor="let cmp of cmpList">
+      <ion-card>
+        <ion-card-header>
+          <div class="ion-text-center">
+            <ion-icon title="Change Company Logo" *ngIf="!cmp.logo" (click)="changeLogo(cmp)" name="person-outline"
+              class="pointer"></ion-icon>
+            <img title="Change Company Logo" *ngIf="cmp.logo" height="80" class="pointer" [src]="cmp.logoID"
+              (click)="changeLogo(cmp)" />
+          </div>
+          <ion-row>
+            <ion-col size="11">
+              <ion-card-title><strong>{{cmp.companyName}}</strong></ion-card-title>
+            </ion-col>
+            <ion-col size="1">
+              <strong>
+                <ion-icon name="settings-outline" class="pointer" (click)="loadScreen(cmp,'manageScreen')" text-right>
+                </ion-icon>
+              </strong>
+            </ion-col>
+          </ion-row>
+        </ion-card-header>
+
+        <ion-card-content>
+          Address : {{cmp.address}}, {{cmp.address2}}
+          <p><small>
+              <ion-icon name="call-outline"></ion-icon> {{cmp.phone}}
+            </small></p>
+          <p><small>
+              <ion-icon name="mail-outline"></ion-icon> {{cmp.email}}
+            </small></p>
+          <p><small><strong>Pin:</strong> {{cmp.pincode}}</small></p>
+          <p><small><strong>City:</strong> {{cmp.city}}</small></p>
+          <p><small><strong>State:</strong> {{cmp.state}}</small></p>
+          <p><small><strong>Country:</strong> India</small></p>
+          <p><small><strong>Description:</strong> {{cmp.description}}</small></p>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'Report')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Report
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'siteQR')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Site Wise QR
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'manualPunch')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Manual Punch
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'todayWorkForce')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Today's Work Force
+              </ion-button>
+            </ion-col>
+            <ion-col size="8">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'generateSalarySlip')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Generate Salary Slip
+              </ion-button>
+            </ion-col>
+            <ion-col size="4">
+              <ion-button size="small" color="primary" (click)="loadScreen(cmp,'assets')">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Assets
+              </ion-button>
+            </ion-col>
+
+            <ion-col size="8">
+              <ion-button size="small" color="primary" (click)="uploadMonthlySalarySlips(cmp)">
+                <ion-icon name="newspaper-outline"></ion-icon>&nbsp;Upload Monthly Salary
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="loadAddCompany()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen=='addCompany'">
+  <app-add-company (successFullyRegister)="loadMain($event)"></app-add-company>
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen == 'manageCompany'">
+  <app-manage-company (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-manage-company>
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen == 'Report'">
+  <app-employee-report (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-employee-report>
+</ion-content>
+<ion-content *ngIf="!skelenton && activeScreen == 'siteQR'">
+  <app-siteQR (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail"></app-siteQR>
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen == 'manualPunch'">
+  <app-manualPunch (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail"></app-manualPunch>
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen == 'todayWorkForce'">
+  <app-today-workforce (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-today-workforce>
+</ion-content>
+
+
+<ion-content *ngIf="!skelenton && activeScreen == 'generateSalarySlip'">
+  <app-generate-salary-slip (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-generate-salary-slip>
+</ion-content>
+
+<ion-content *ngIf="!skelenton && activeScreen == 'assets'">
+  <app-assets (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-assets>
+</ion-content>
+
+
+
+
+
+<!-- <ion-content *ngIf="!skelenton && activeScreen == 'Leave'">
+  <app-employee-leave (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-employee-leave>
+</ion-content>
+<ion-content *ngIf="!skelenton && activeScreen == 'Reimburse'">
+  <app-employee-reimbursement (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-employee-reimbursement>
+</ion-content>
+<ion-content *ngIf="!skelenton && activeScreen == 'Advance'">
+  <app-employee-advance (successFullyRegister)="loadMain($event)" [companyDetails]="selectedCompanyDetail">
+  </app-employee-advance>
+</ion-content> -->

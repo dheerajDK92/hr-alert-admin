@@ -1,0 +1,107 @@
+<form #form="ngForm" autocomplete="new" (ngSubmit)="submitUpdateCompanyForm(form)">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-start" color="primary">
+          <ion-button type="button" size="small" expand="block">
+            Company Profile Detail's
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Name:</ion-label>
+          <ion-input disabled [(ngModel)]="companydata.companyName" name="companyName" type="text" placeholder="Company Name...."
+            ngModel required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Email:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.email" name="email" type="email" placeholder="Email...." ngModel
+            required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Phone:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.phone" name="phone" type="number" placeholder="Phone...." ngModel
+            required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Address:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.address" name="address" type="text" placeholder="Address...." ngModel
+            required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Company Address 2:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.address2" name="address2" type="text" placeholder="Address 2...." ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Pin code:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.pincode" name="pincode" type="text" placeholder="Pin code...." ngModel
+            required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>City:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.city" name="city" type="text" placeholder="City...." ngModel required>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>State:</ion-label>
+          <ion-input [disabled]="disabledUpdateField" [(ngModel)]="companydata.state" name="state" type="text" placeholder="State...." ngModel required>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Country:</ion-label>
+          <ion-input name="country" type="text" [(ngModel)]="companydata.country" disabled value="India" placeholder="India" ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Emp Limit:</ion-label>
+          <ion-input name="EmpLimit" [disabled]="disabledUpdateField" [(ngModel)]="companydata.EmpLimit" type="number" value="10" placeholder="Emp Limit" ngModel>
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>Description:</ion-label>
+          <ion-textarea [disabled]="disabledUpdateField" class="descriptionArea" [(ngModel)]="companydata.description" name="description" type="text" placeholder="Company About Us..." ngModel>
+          </ion-textarea>
+        </ion-item>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>If you want to update company profile, please Enable this toggle button:</ion-label>
+          <ion-toggle color="primary" (ionChange)="updateToggleChange($event)"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6" *ngIf="!disabledUpdateField">
+        <div padding>
+          <ion-button type="submit" [disabled]="!form.valid" size="large" type="submit" expand="block">Update Company
+            Details
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

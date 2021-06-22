@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="11">
+          <h3>Employee ID Card</h3>
+        </ion-col>
+        <ion-col size="1">
+          <h3>
+            <ion-icon name="close-circle-outline" class="pointer" (click)="cancelPopUp()" float-right></ion-icon>
+          </h3>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-col size="12" *ngIf="!isQrCodeSection">
+        <div class="wrapper">
+          <div class="card">
+            <img *ngIf="selectedEmpDetails?.logo && selectedEmpDetails?.logoID" [src]="selectedEmpDetails?.logoID"
+              [alt]="selectedEmpDetails?.empname">
+            <img *ngIf="!selectedEmpDetails?.logo && !selectedEmpDetails?.logoID"
+              src="./../../../../assets/icon/logoIcon.png" [alt]="selectedEmpDetails?.empname">
+            <ngx-qrcode [elementType]="elementType" [value]="value" cssClass="aclass" errorCorrectionLevel="L">
+            </ngx-qrcode>
+            <div class="info">
+              <p>{{selectedEmpDetails?.empname}}</p>
+              <p><small>Site: {{selectedEmpDetails?.Site}}</small></p>
+              <p><small>ID: {{selectedEmpDetails?.empID}}</small></p>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+
+      <ion-col size="12" *ngIf="isQrCodeSection">
+        <div class="wrapper">
+          <div class="card ion-text-center">
+            <ngx-qrcode [elementType]="elementType" [value]="value" cssClass="aclass" errorCorrectionLevel="L">
+            </ngx-qrcode>
+            <div class="info">
+              <p>{{selectedEmpDetails?.empname}}</p>
+              <p><small>Site: {{selectedEmpDetails?.Site}}</small></p>
+              <p><small>ID: {{selectedEmpDetails?.empID}}</small></p>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <!-- <br />
+        <ion-button class="viewChangeBtn" size="small" (click)="changeQRView()">{{isQrCodeSection ? "ID Card View" : "QR
+          Code View"}}
+        </ion-button> -->
+        <br />
+        <br />
+        <ion-button class="printBtn" size="small" (click)="print()">Print</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

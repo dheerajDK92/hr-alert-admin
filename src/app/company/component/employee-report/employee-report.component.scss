@@ -1,0 +1,20 @@
+.header{
+    border-bottom: groove;
+    background: #ffc409;
+    color: #333;
+  }
+.salaryReports{
+  ion-row{
+    font-size: 8px;
+  }
+}
+.tableExample{
+  font-size: 5px;
+  td{
+    border-right: 0px;
+    border-left: 0px;
+  }
+}
+ion-button.md.button.button-small.button-solid.ion-activatable.ion-focusable.hydrated {
+  font-size: 6px;
+}
